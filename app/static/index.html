@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Based Machine Learning Recommendation & Training System</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js for Loss curves and graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons for premium visual design -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header>
+            <div class="logo-section">
+                <h1><i data-lucide="brain-circuit" style="color:#8b5cf6;"></i> AutoML Scratch</h1>
+                <p>Intelligent Algorithm Recommendation & Model Fitting from First Principles</p>
+            </div>
+            <div class="status-badge">
+                <span class="status-dot active" id="status-dot"></span>
+                <span id="status-text">Ready for Dataset</span>
+            </div>
+        </header>
+
+        <!-- Step Indicator Bar -->
+        <div class="step-indicator-bar">
+            <div class="step-indicator active" id="indicator-1" data-step="1">1</div>
+            <div class="step-indicator" id="indicator-2" data-step="2">2</div>
+            <div class="step-indicator" id="indicator-3" data-step="3">3</div>
+            <div class="step-indicator" id="indicator-4" data-step="4">4</div>
+        </div>
+
+        <!-- STEP 1: Upload and Problem Type -->
+        <section id="step-1" class="step-section active">
+            <div class="glass-card">
+                <h3><i data-lucide="upload-cloud"></i> Step 1: Upload Dataset & Select Problem Type</h3>
+                
+                <div class="form-group">
+                    <label>Upload CSV File</label>
+                    <div class="upload-zone" id="upload-zone">
+                        <i data-lucide="file-spread-sheet" class="upload-icon"></i>
+                        <div>
+                            <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 4px;">Drag & Drop your CSV file here</p>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">or click to browse local files</p>
+                        </div>
+                        <input type="file" id="file-input" class="file-input" accept=".csv" style="display: none;">
+                    </div>
+                    <div id="file-upload-success" style="display: none; margin-top: 12px; color: var(--secondary); font-weight: 500; font-size: 0.9rem;">
+                        <i data-lucide="check-circle" style="vertical-align: middle; display: inline-block;"></i> <span id="uploaded-filename">dataset.csv</span> uploaded successfully.
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 30px;">
+                    <label>Select Machine Learning Problem Type</label>
+                    <div class="radio-cards">
+                        <div class="radio-card selected" data-value="classification">
+                            <input type="radio" name="problem_type" value="classification" checked>
+                            <i data-lucide="git-branch" class="radio-card-icon"></i>
+                            <div class="radio-card-title">Classification</div>
+                            <div class="radio-card-desc">Predict discrete classes or labels</div>
+                        </div>
+                        <div class="radio-card" data-value="regression">
+                            <input type="radio" name="problem_type" value="regression">
+                            <i data-lucide="trending-up" class="radio-card-icon"></i>
+                            <div class="radio-card-title">Regression</div>
+                            <div class="radio-card-desc">Predict continuous values</div>
+                        </div>
+                        <div class="radio-card" data-value="clustering">
+                            <input type="radio" name="problem_type" value="clustering">
+                            <i data-lucide="component" class="radio-card-icon"></i>
+                            <div class="radio-card-title">Clustering</div>
+                            <div class="radio-card-desc">Group similar data points together</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-nav">
+                    <div></div>
+                    <button class="btn btn-disabled" id="btn-goto-step2" disabled>Next: Analyze Data <i data-lucide="arrow-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- STEP 2: Data Analysis & AI Recommendations -->
+        <section id="step-2" class="step-section">
+            <div class="glass-card">
+                <h3><i data-lucide="table-2"></i> Step 2: Dataset Preview</h3>
+                <div class="table-wrapper" id="preview-table-wrapper">
+                    <p style="color: var(--text-muted); padding: 20px; text-align: center;">No preview available. Please upload a dataset.</p>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3><i data-lucide="settings-2"></i> Configuration & Recommendation</h3>
+                <div class="form-group" id="target-selection-group">
+                    <label for="target-select">Select Target Column (Y)</label>
+                    <select id="target-select">
+                        <option value="">-- Choose Target --</option>
+                    </select>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 6px;">The column you want your model to predict.</p>
+                </div>
+                
+                <button class="btn btn-success" id="btn-run-analysis" style="width: 100%; margin-top: 10px;">
+                    <i data-lucide="cpu"></i> Run AI Dataset Analysis & Recommend Algorithms
+                </button>
+            </div>
+
+            <!-- Analysis Dashboard & Rec list (Hidden until run) -->
+            <div id="analysis-dashboard-section" style="display: none;">
+                <div class="analysis-layout">
+                    <!-- Left: Statistical Report -->
+                    <div class="glass-card">
+                        <h3><i data-lucide="bar-chart-3"></i> Dataset Analysis Report</h3>
+                        
+                        <div class="stat-cards-grid">
+                            <div class="stat-card">
+                                <div class="stat-val" id="stat-rows">-</div>
+                                <div class="stat-lbl">Rows</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-val" id="stat-cols">-</div>
+                                <div class="stat-lbl">Columns</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-val" id="stat-missing">-</div>
+                                <div class="stat-lbl">Missing</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-val" id="stat-duplicates">-</div>
+                                <div class="stat-lbl">Duplicates</div>
+                            </div>
+                        </div>
+
+                        <h4 style="margin-top: 24px; margin-bottom: 12px; font-size: 1rem; color: var(--text-secondary);">Detected Feature Types</h4>
+                        <div class="feature-info-grid" id="feature-type-breakdown">
+                            <!-- Populated by JS -->
+                        </div>
+                        
+                        <div id="class-balance-section" style="margin-top: 24px; display: none;">
+                            <h4 style="margin-bottom: 12px; font-size: 1rem; color: var(--text-secondary);">Class Distribution / Balance</h4>
+                            <div class="table-wrapper">
+                                <table id="class-balance-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Class Label</th>
+                                            <th>Record Count</th>
+                                            <th>Percentage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: AI Recommendations -->
+                    <div class="glass-card">
+                        <h3><i data-lucide="sparkles"></i> AI Recommender Engine (Top 3)</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+                            We evaluated each from-scratch algorithm based on your dataset characteristics. Click a recommendation to select it.
+                        </p>
+                        
+                        <div class="recs-container" id="recommendations-container">
+                            <!-- Rec cards populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-nav" style="margin-top: 24px;">
+                <button class="btn btn-secondary btn-back-step" data-target="1"><i data-lucide="arrow-left"></i> Back</button>
+                <button class="btn btn-disabled" id="btn-goto-step3" disabled>Next: Preprocessing & Training <i data-lucide="arrow-right"></i></button>
+            </div>
+        </section>
+
+        <!-- STEP 3: Setup & Training -->
+        <section id="step-3" class="step-section">
+            <div class="setup-layout">
+                <!-- Left: Preprocessing & Hyperparams -->
+                <div>
+                    <div class="glass-card">
+                        <h3><i data-lucide="sliders"></i> Preprocessing Settings</h3>
+                        
+                        <div class="form-group">
+                            <label for="impute-numeric-select">Numerical Imputation</label>
+                            <select id="impute-numeric-select">
+                                <option value="mean">Mean Value</option>
+                                <option value="median">Median Value</option>
+                                <option value="mode">Mode (Most Common)</option>
+                                <option value="zero">Constant (Zero)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="impute-categorical-select">Categorical Imputation</label>
+                            <select id="impute-categorical-select">
+                                <option value="mode">Mode (Most Common)</option>
+                                <option value="missing">Constant ("Missing" string)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="scaler-select">Feature Scaling</label>
+                            <select id="scaler-select">
+                                <option value="minmax">MinMax Normalization [0, 1]</option>
+                                <option value="standard">Standardization (Mean=0, Std=1)</option>
+                                <option value="none">No Scaling</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Train-Test Split Ratio: <span id="split-ratio-val">80% / 20%</span></label>
+                            <input type="range" id="split-ratio-slider" min="10" max="50" step="5" value="20" style="width: 100%; accent-color: var(--primary);">
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h3><i data-lucide="binary"></i> Selected Algorithm</h3>
+                        <div class="form-group">
+                            <label for="algo-select">Algorithm to Train</label>
+                            <select id="algo-select">
+                                <!-- Populated dynamically based on problem type -->
+                            </select>
+                        </div>
+
+                        <h4 style="margin-top: 20px; margin-bottom: 12px; font-size: 0.95rem; color: var(--text-secondary);">Hyperparameters</h4>
+                        <div id="hyperparams-container" class="hyperparams-grid">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Feature selection & training trigger -->
+                <div>
+                    <div class="glass-card">
+                        <h3><i data-lucide="check-square"></i> Select Features (X)</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;">Choose columns to use as inputs for the model.</p>
+                        <div class="features-selector-list" id="feature-checkboxes-container">
+                            <!-- Checkboxes populated via JS -->
+                        </div>
+                        <div style="margin-top: 10px; display: flex; gap: 10px;">
+                            <button class="btn btn-secondary" id="btn-select-all-features" style="padding: 6px 12px; font-size: 0.8rem;">Select All</button>
+                            <button class="btn btn-secondary" id="btn-clear-features" style="padding: 6px 12px; font-size: 0.8rem;">Clear All</button>
+                        </div>
+                    </div>
+
+                    <div class="glass-card" style="text-align: center; padding: 40px 20px;">
+                        <i data-lucide="terminal" style="font-size: 3rem; color: var(--primary); margin-bottom: 16px; display: inline-block;"></i>
+                        <h3>Ready to Train</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 24px;">The model will be trained entirely from scratch. You will see real-time metrics and loss histories.</p>
+                        <button class="btn btn-success btn-lg" id="btn-train-model" style="padding: 16px 40px; font-size: 1.1rem; width: 100%;">
+                            <i data-lucide="play"></i> Train Selected Algorithm From Scratch
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-nav">
+                <button class="btn btn-secondary btn-back-step" data-target="2"><i data-lucide="arrow-left"></i> Back</button>
+                <div></div>
+            </div>
+        </section>
+
+        <!-- STEP 4: Training Results & Prediction -->
+        <section id="step-4" class="step-section">
+            <!-- Loading Training state -->
+            <div class="glass-card" id="training-loading-card" style="display: none;">
+                <div class="train-loader-wrap">
+                    <div class="spinner"></div>
+                    <h3 style="border-bottom:none; margin-bottom:0; padding-bottom:0;">Training Model From Scratch...</h3>
+                    <p style="color: var(--text-secondary);">Initializing parameters, running math matrix updates and computing error gradients.</p>
+                    <div class="progress-track">
+                        <div class="progress-bar-fill" id="training-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Dashboard (Hidden until trained) -->
+            <div id="training-results-section" style="display: none;">
+                <div class="analysis-layout">
+                    <!-- Left: Metrics Dashboard -->
+                    <div class="glass-card">
+                        <h3><i data-lucide="award"></i> Model Evaluation Results</h3>
+                        
+                        <div class="metrics-grid" id="metrics-cards-container">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+
+                        <!-- Confusion matrix (only classification) -->
+                        <div id="confusion-matrix-container" style="display: none; margin-top: 24px; text-align: center;">
+                            <h4 style="margin-bottom: 12px; font-size: 1rem; color: var(--text-secondary);">Confusion Matrix (Test Set)</h4>
+                            <div id="cm-rendering-target"></div>
+                        </div>
+
+                        <!-- Cluster distribution (only clustering) -->
+                        <div id="cluster-dist-container" style="display: none; margin-top: 24px;">
+                            <h4 style="margin-bottom: 12px; font-size: 1rem; color: var(--text-secondary);">Cluster Assignment Details</h4>
+                            <div class="table-wrapper">
+                                <table id="cluster-dist-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cluster ID</th>
+                                            <th>Number of Points</th>
+                                            <th>Distribution Ratio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Loss/Optimization Curve -->
+                    <div class="glass-card">
+                        <h3><i data-lucide="line-chart"></i> Training History / Optimization Curve</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem;" id="chart-description">
+                            Visualizes training loss reductions or metric convergence over learning iterations.
+                        </p>
+                        <div class="chart-container">
+                            <canvas id="history-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Predictions Section: Single + Batch -->
+                <div class="analysis-layout" style="margin-top: 24px;">
+                    <!-- Single Prediction Playground -->
+                    <div class="glass-card" style="margin-bottom: 0;">
+                        <h3><i data-lucide="play-circle"></i> Single-Sample Prediction</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px;">
+                            Provide sample values for the input features below to compute instant inferences.
+                        </p>
+                        
+                        <form id="prediction-form">
+                            <div class="prediction-form-grid" id="prediction-form-inputs" style="grid-template-columns: 1fr;">
+                                <!-- Inputs generated by JS -->
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success" style="margin-top: 24px; width: 100%;">
+                                <i data-lucide="corner-down-left"></i> Run Model Prediction
+                            </button>
+                        </form>
+
+                        <div class="prediction-result-box" id="prediction-result-panel" style="display: none;">
+                            <h4 style="font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase;">Model Predicted Output</h4>
+                            <div class="prediction-val-glow" id="predicted-value">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Batch Predictions via CSV -->
+                    <div class="glass-card" style="margin-bottom: 0;">
+                        <h3><i data-lucide="files"></i> Batch Predictions via CSV</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px;">
+                            Upload a test dataset CSV file (containing the required features) to compute bulk model predictions.
+                        </p>
+                        
+                        <div class="form-group">
+                            <label>Upload Test CSV</label>
+                            <div class="upload-zone" id="batch-upload-zone" style="padding: 24px 10px;">
+                                <i data-lucide="file-down" class="upload-icon" style="font-size: 2.2rem;"></i>
+                                <div>
+                                    <p style="font-weight: 600; font-size: 0.95rem; margin-bottom: 2px;">Drag & Drop test CSV</p>
+                                    <p style="color: var(--text-secondary); font-size: 0.8rem;">or click to browse</p>
+                                </div>
+                                <input type="file" id="batch-file-input" accept=".csv" style="display: none;">
+                            </div>
+                            <div id="batch-file-success" style="display: none; margin-top: 10px; color: var(--secondary); font-weight: 500; font-size: 0.85rem;">
+                                <i data-lucide="check-circle" style="vertical-align: middle; display: inline-block;"></i> <span id="batch-filename">test.csv</span> loaded.
+                            </div>
+                        </div>
+
+                        <button class="btn btn-disabled" id="btn-run-batch" style="width: 100%;" disabled>
+                            <i data-lucide="play"></i> Run Batch Prediction
+                        </button>
+
+                        <!-- Batch Predictions results -->
+                        <div id="batch-prediction-results" style="display: none; margin-top: 20px;">
+                            <!-- Batch Test Evaluation metrics container -->
+                            <div id="batch-metrics-container" style="display: none; margin-bottom: 18px; border: 1px dashed rgba(16, 185, 129, 0.2); padding: 12px; border-radius: 8px; background: rgba(16, 185, 129, 0.02);">
+                                <h4 style="margin-bottom: 8px; font-size: 0.9rem; color: var(--secondary); display:flex; align-items:center; gap:6px;">
+                                    <i data-lucide="gauge"></i> Out-of-Sample Test Evaluation
+                                </h4>
+                                <div class="stat-cards-grid" id="batch-metrics-grid" style="gap: 8px; margin-bottom: 0; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));">
+                                    <!-- Populated dynamically via JS -->
+                                </div>
+                            </div>
+
+                            <h4 style="margin-bottom: 8px; font-size: 0.9rem; color: var(--text-secondary);">Batch Predictions Preview</h4>
+                            <div class="table-wrapper" id="batch-preview-table-wrapper" style="max-height: 180px;">
+                                <!-- Table populated by JS -->
+                            </div>
+                            <a id="btn-download-predictions" href="/api/predict/download" target="_blank" class="btn btn-success" style="width: 100%; margin-top: 14px;">
+                                <i data-lucide="download"></i> Download Predicted CSV File
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-nav" style="margin-top: 24px;">
+                <button class="btn btn-secondary btn-back-step" data-target="3"><i data-lucide="arrow-left"></i> Back to Train Settings</button>
+                <button class="btn btn-secondary" id="btn-restart-app"><i data-lucide="refresh-cw"></i> Start Over</button>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS Logic -->
+    <script src="app.js"></script>
+    <script>
+        // Init Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
