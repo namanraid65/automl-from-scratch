@@ -44,7 +44,18 @@ from app.ml.evaluation import (
 )
 from app.ml.recommender import analyze_dataset, recommend_algorithms
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(title="AI-Based ML Algorithm Recommendation System")
+
+# Enable CORS for cross-origin deployments (like Vercel)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Create data directory if not exists
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
