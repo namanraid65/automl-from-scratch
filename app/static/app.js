@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupTrainingTrigger();
     setupPredictionTrigger();
     setupBatchPredictionHandlers();
+    setupThemeHandler();
 
     btnRestartApp.addEventListener('click', () => {
         window.location.reload();
@@ -867,6 +868,10 @@ function renderTrainingHistoryChart(algoName, history) {
     const canvas = document.getElementById('history-chart');
     const ctx = canvas.getContext('2d');
     
+    // Cache parameters for theme changes
+    state.lastChartAlgo = algoName;
+    state.lastChartData = history;
+    
     // Destroy previous instance
     if (state.historyChart) {
         state.historyChart.destroy();
@@ -894,6 +899,12 @@ function renderTrainingHistoryChart(algoName, history) {
         fillGradientStart = 'rgba(16, 185, 129, 0.15)';
     }
 
+    // Theme-dependent colors
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const gridColor = isLight ? 'rgba(15, 23, 42, 0.05)' : 'rgba(255, 255, 255, 0.03)';
+    const tickColor = isLight ? '#475569' : '#6b7280';
+    const titleColor = isLight ? '#0f172a' : '#9ca3af';
+
     state.historyChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -918,14 +929,14 @@ function renderTrainingHistoryChart(algoName, history) {
             },
             scales: {
                 x: {
-                    grid: { color: 'rgba(255, 255, 255, 0.03)' },
-                    ticks: { color: '#6b7280', maxTicksLimit: 10 },
-                    title: { display: true, text: 'Iterations / Epochs', color: '#9ca3af' }
+                    grid: { color: gridColor },
+                    ticks: { color: tickColor, maxTicksLimit: 10 },
+                    title: { display: true, text: 'Iterations / Epochs', color: titleColor }
                 },
                 y: {
-                    grid: { color: 'rgba(255, 255, 255, 0.03)' },
-                    ticks: { color: '#6b7280' },
-                    title: { display: true, text: yLabel, color: '#9ca3af' }
+                    grid: { color: gridColor },
+                    ticks: { color: tickColor },
+                    title: { display: true, text: yLabel, color: titleColor }
                 }
             }
         }
@@ -1212,4 +1223,44 @@ function setupBatchPredictionHandlers() {
         html += '</tbody></table>';
         batchPreviewTableWrapper.innerHTML = html;
     }
+}
+
+function setupThemeHandler() {
+    const toggleBtn = document.getElementById('btn-theme-toggle');
+    const icon = document.getElementById('theme-toggle-icon');
+    const text = document.getElementById('theme-toggle-text');
+    
+    // Check local storage for theme preference
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    if (currentTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        icon.setAttribute('data-lucide', 'moon');
+        text.innerText = 'Dark Mode';
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        icon.setAttribute('data-lucide', 'sun');
+        text.innerText = 'Light Mode';
+    }
+    lucide.createIcons();
+    
+    toggleBtn.addEventListener('click', () => {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        if (isLight) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            icon.setAttribute('data-lucide', 'sun');
+            text.innerText = 'Light Mode';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            icon.setAttribute('data-lucide', 'moon');
+            text.innerText = 'Dark Mode';
+        }
+        lucide.createIcons();
+        
+        // Re-render the loss chart if it exists
+        if (state.historyChart && state.lastChartData) {
+            renderTrainingHistoryChart(state.lastChartAlgo, state.lastChartData);
+        }
+    });
 }

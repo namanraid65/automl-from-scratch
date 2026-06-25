@@ -20,6 +20,48 @@
     --font-body: 'Inter', sans-serif;
     
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Theme-specific custom variables */
+    --input-bg: rgba(0, 0, 0, 0.3);
+    --th-bg: rgba(17, 24, 39, 0.9);
+    --hover-bg: rgba(255, 255, 255, 0.02);
+    --table-bg: rgba(0, 0, 0, 0.2);
+    --features-bg: rgba(0, 0, 0, 0.2);
+    --checkbox-border: rgba(255, 255, 255, 0.03);
+    --progress-bg: rgba(255, 255, 255, 0.05);
+    --subcard-bg: rgba(255, 255, 255, 0.02);
+    
+    --bg-gradient: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                   radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 40%);
+}
+
+[data-theme="light"] {
+    --bg-color: #f3f4f6;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --border-color: rgba(15, 23, 42, 0.08);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    
+    --primary: #6d28d9;
+    --primary-glow: rgba(109, 40, 217, 0.15);
+    --secondary: #059669;
+    --secondary-glow: rgba(5, 150, 105, 0.1);
+    --accent-blue: #2563eb;
+    --accent-rose: #e11d48;
+    --accent-yellow: #d97706;
+    
+    --input-bg: rgba(255, 255, 255, 0.9);
+    --th-bg: #e2e8f0;
+    --hover-bg: rgba(15, 23, 42, 0.02);
+    --table-bg: rgba(255, 255, 255, 0.4);
+    --features-bg: rgba(15, 23, 42, 0.02);
+    --checkbox-border: rgba(15, 23, 42, 0.04);
+    --progress-bg: rgba(15, 23, 42, 0.05);
+    --subcard-bg: rgba(15, 23, 42, 0.02);
+    
+    --bg-gradient: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 40%),
+                   radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
 }
 
 * {
@@ -33,9 +75,7 @@ body {
     color: var(--text-primary);
     font-family: var(--font-body);
     line-height: 1.6;
-    background-image: 
-        radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 40%);
+    background-image: var(--bg-gradient);
     background-attachment: fixed;
     min-height: 100vh;
     padding-bottom: 80px;
@@ -152,7 +192,7 @@ label {
 
 select, input[type="text"], input[type="number"], .file-input {
     width: 100%;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--input-bg);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 12px 16px;
@@ -340,7 +380,7 @@ select:focus, input[type="text"]:focus, input[type="number"]:focus {
     border-radius: 8px;
     border: 1px solid var(--border-color);
     margin-top: 16px;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--table-bg);
 }
 
 table {
@@ -350,7 +390,7 @@ table {
 }
 
 th {
-    background: rgba(17, 24, 39, 0.9);
+    background: var(--th-bg);
     position: sticky;
     top: 0;
     color: var(--text-primary);
@@ -367,7 +407,7 @@ td {
 }
 
 tr:hover td {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--hover-bg);
 }
 
 /* Feature grid info cards */
@@ -498,7 +538,7 @@ tr:hover td {
 
 .confidence-progress-bar {
     height: 6px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--progress-bg);
     border-radius: 99px;
     margin-bottom: 12px;
     overflow: hidden;
@@ -551,7 +591,7 @@ tr:hover td {
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 12px;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--features-bg);
 }
 
 .checkbox-item {
@@ -559,7 +599,7 @@ tr:hover td {
     align-items: center;
     gap: 10px;
     padding: 8px 6px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid var(--checkbox-border);
     cursor: pointer;
     user-select: none;
 }
@@ -584,7 +624,7 @@ tr:hover td {
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--subcard-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 16px;
@@ -742,7 +782,7 @@ tr:hover td {
 .progress-track {
     width: 100%;
     height: 6px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--progress-bg);
     border-radius: 99px;
     overflow: hidden;
     margin-top: 12px;

@@ -20,9 +20,14 @@
                 <h1><i data-lucide="brain-circuit" style="color:#8b5cf6;"></i> AutoML Scratch</h1>
                 <p>Intelligent Algorithm Recommendation & Model Fitting from First Principles</p>
             </div>
-            <div class="status-badge">
-                <span class="status-dot active" id="status-dot"></span>
-                <span id="status-text">Ready for Dataset</span>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <button class="btn btn-secondary" id="btn-theme-toggle" style="padding: 8px 14px; font-size: 0.82rem; height: 36px; border-radius: 99px; display: inline-flex; align-items: center; gap: 6px;">
+                    <i data-lucide="sun" id="theme-toggle-icon" style="width: 14px; height: 14px;"></i> <span id="theme-toggle-text">Light Mode</span>
+                </button>
+                <div class="status-badge" style="height: 36px; margin: 0;">
+                    <span class="status-dot active" id="status-dot"></span>
+                    <span id="status-text">Ready for Dataset</span>
+                </div>
             </div>
         </header>
 
